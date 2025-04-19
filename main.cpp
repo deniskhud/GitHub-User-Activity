@@ -40,7 +40,7 @@ void fetchGitHubActivity(const string& username) {
         res = curl_easy_perform(curl);
 
         if (res != CURLE_OK) {
-            cerr << "Ошибка при запросе: " << curl_easy_strerror(res) << endl;
+            cerr << "Request error: " << curl_easy_strerror(res) << endl;
         }
         else {
             // parse the received JSON data
@@ -68,7 +68,7 @@ void fetchGitHubActivity(const string& username) {
                 }
             }
             else {
-                cerr << "Ошибка при парсинге JSON: " << errs << endl;
+                cerr << "Error when parsing JSON: " << errs << endl;
             }
         }
 
