@@ -6,7 +6,7 @@
 
 using namespace std;
 
-//contest -> указатель на данные; size, nmemb -> размер; output -> данные куда записываем
+//contest -> pointer to data; size, nmemb -> size; output -> where to write the data
 size_t WriteCallBack(void* contest, size_t size, size_t nmemb, string* output) {
 	size_t totalSize = size * nmemb;
 	output->append((char*)contest, totalSize);
@@ -18,32 +18,32 @@ void fetchGitHubActivity(const string& username) {
     CURLcode res;
     string readBuffer;
 
-    // Инициализация CURL
+    // initializing CURL
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
 
     if (curl) {
-        // Устанавливаем URL для запроса
+        //setting the URL for the request
         string url = "https://api.github.com/users/" + username + "/events";
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());   
 
-        // Устанавливаем заголовки для запроса (имитация браузера, чтобы избежать блокировок)
+        // we set the headers for the request (imitation of the browser to avoid blocking)
         struct curl_slist* headers = nullptr;
         headers = curl_slist_append(headers, "User-Agent: curl");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-        // Устанавливаем функцию обработки данных
+        // installing the data processing function
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallBack);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 
-        // Выполняем запрос
+        // executing the request
         res = curl_easy_perform(curl);
 
         if (res != CURLE_OK) {
             cerr << "Ошибка при запросе: " << curl_easy_strerror(res) << endl;
         }
         else {
-            // Парсим полученные данные JSON
+            // parse the received JSON data
             Json::CharReaderBuilder readerBuilder;
             Json::Value jsonData;
             string errs;
@@ -72,7 +72,7 @@ void fetchGitHubActivity(const string& username) {
             }
         }
 
-        // Освобождаем ресурсы
+        // freeing up resources
         curl_easy_cleanup(curl);
         curl_global_cleanup();
     }
@@ -83,11 +83,11 @@ int main() {
 	
     string username;
 
-    // Вводим имя пользователя
+   
     cout << "Enter GitHub username: ";
     cin >> username;
 
-    // Получаем активность пользователя
+   
     fetchGitHubActivity(username);
 	
 
